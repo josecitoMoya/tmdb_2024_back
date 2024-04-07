@@ -1,7 +1,8 @@
 import express from "express";
-const router = express.Router();
 
 import { user } from "./users.js";
+
+const router = express.Router();
 
 router.use("/user", user);
 

@@ -1,9 +1,15 @@
 import express from "express";
 
+import {
+  createUser,
+  findAllUsers,
+  findUser,
+} from "../controllers/userControllers.js";
+
 export const user = express.Router();
 
-user.get("/", (req, res) => {
-  res.send("Estas en routes/user");
-});
+user.post("/signup", createUser);
 
-// router.post("/signup", userController)
+user.get("/users", findUser);
+
+user.get("/all", findAllUsers);

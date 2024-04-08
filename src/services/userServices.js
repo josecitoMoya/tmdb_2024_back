@@ -33,4 +33,20 @@ userServices.findUser = async (userData) => {
   }
 };
 
+userServices.loginUser = async (userData) => {
+  const { email, userName, password } = userData;
+
+  try {
+    const user = email
+      ? await User.findOne({ where: { email } })
+      : await User.findOne({ where: { userName } });
+
+    if (!user && user.validatePassword(password)) return user;
+
+    return user;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export default userServices;

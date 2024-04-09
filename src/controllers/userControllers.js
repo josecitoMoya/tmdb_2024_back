@@ -1,3 +1,4 @@
+import { generateToken } from "../config/tokens.js";
 import userServices from "../services/userServices.js";
 
 export const createUser = async (req, res) => {
@@ -11,7 +12,7 @@ export const createUser = async (req, res) => {
     }
 
     const newUser = await userServices.createUser(userData);
-    res.send({ message: "User created", newUser });
+    res.send(newUser);
   } catch (error) {
     throw new Error(error);
   }
@@ -23,7 +24,7 @@ export const findUser = async (req, res) => {
 
     const findedUser = await userServices.findUser(userData);
 
-    res.send({ message: "User finded", findedUser });
+    res.send(findedUser);
   } catch (error) {
     throw new Error(error);
   }
@@ -41,11 +42,19 @@ export const userLogin = async (req, res) => {
 
     const userLogedIn = await userServices.loginUser(userData);
 
-    if (!userLogedIn) {
-      return res.status(401).send({ message: "Invalid user or passoword" });
-    }
+    const token = generateToken(userLogedIn);
 
-    res.send({ message: "User loged in successfuly", userLogedIn });
+    res.cookie("token", token).send(userLogedIn);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const userLogout = async (req, res) => {
+  try {
+    const token = await req.cookies.token;
+
+    res.clearCookie(token).sendStatus(200);
   } catch (error) {
     throw new Error(error);
   }

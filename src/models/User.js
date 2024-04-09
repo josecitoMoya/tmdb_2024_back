@@ -34,15 +34,16 @@ export const User = sequelize.define(
   },
   {
     hooks: {
-      beforeCreate: async (user, options) => {
+      beforeCreate: async (user) => {
         try {
-          const saltRounds = 10;
-          const salt = await bcrypt.genSalt(saltRounds);
+          const salt = await bcrypt.genSalt(10);
           const hashedPassword = await bcrypt.hash(user.password, salt);
 
           user.password = hashedPassword;
           user.salt = salt;
-        } catch (error) {}
+        } catch (error) {
+          throw new Error(error);
+        }
       },
     },
   }
@@ -59,7 +60,7 @@ User.prototype.generateHash = async function (password, saltROunds = 10) {
 
 User.prototype.validatePassword = async function (password) {
   try {
-    return bcrypt.compare(password, this.salt);
+    return await bcrypt.compare(password, this.password);
   } catch (error) {
     throw new Error(error);
   }

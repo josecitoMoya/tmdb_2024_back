@@ -13,7 +13,7 @@ userServices.findAllUsers = async () => {
 userServices.createUser = async (userData) => {
   try {
     const newUser = await User.create(userData);
-    return newUser;
+    return { message: "User created successfuly", newUser };
   } catch (error) {
     throw new Error("User can not be created", error);
   }
@@ -41,9 +41,13 @@ userServices.loginUser = async (userData) => {
       ? await User.findOne({ where: { email } })
       : await User.findOne({ where: { userName } });
 
-    if (!user && user.validatePassword(password)) return user;
+    if (!user) return { message: "Wrong user or password" };
 
-    return user;
+    const userValidated = await user.validatePassword(password);
+
+    if (!userValidated) return { message: "Wrong user or password" };
+
+    return { message: "User loggedin successfuly", user };
   } catch (error) {
     throw new Error(error);
   }

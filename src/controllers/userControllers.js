@@ -42,6 +42,9 @@ export const userLogin = async (req, res) => {
 
     const userLogedIn = await userServices.loginUser(userData);
 
+    if (!userLogedIn.user) {
+      return res.sendStatus(401);
+    }
     const token = generateToken(userLogedIn);
 
     res.cookie("token", token).send(userLogedIn);

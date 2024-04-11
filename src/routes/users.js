@@ -18,6 +18,5 @@ user.post("/logout", userLogout);
 user.get("/users", findUser);
 user.get("/all", validateUser, findAllUsers);
 user.get("/me", validateUser, (req, res) => {
-  console.log("SOY REQ.USER", req.user);
   res.send(req.user);
 });

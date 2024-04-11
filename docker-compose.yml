@@ -53,21 +53,26 @@
 version: "3.9"
 
 services:
-  db:
+  database:
     image: postgres
     restart: allways
-    environment:
-      POSTGRES_DB: tmdb_db
-      DB_NAME: postgres
-      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+    environment:
+      - DATABASE_HOST=localhost
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tmdb_db
 
-  adminer:
-    image: adminer
-    restart: allways
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PPGADMIN_DEFAULT_EMAIL: "jose_moya@live.com.ar"
+      PPGADMIN_DEFAULT_PASSWORD: "admin"
     ports:
-      - 8080:8080
+      - "80:80"
+    depends_on:
+      - postgres
 
   server:
     build:
@@ -86,7 +91,7 @@ services:
       - "3000:3000"
 
     depends_on:
-      - db
+      - database
 
 networks:
   backend:

@@ -6,11 +6,11 @@ import app from "./app.js";
 import "./models/index.js";
 
 async function main() {
-  const PORT = process.env.PORT;
-  const MESSAGE = process.env.SERVER_MESSAGE;
+  const { PORT, SERVER_MESSAGE } = process.env;
+
   try {
     await sequelize.sync({ force: false });
-    app.listen(PORT, () => console.log(`${MESSAGE} ${PORT}`));
+    app.listen(PORT, () => console.log(`${SERVER_MESSAGE} ${PORT}`));
   } catch (error) {
     console.log("Error", error);
   }

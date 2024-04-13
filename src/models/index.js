@@ -1,13 +1,12 @@
 import { User } from "./User.js";
 import { Favorite } from "./Favorite.js";
 
-const hasManyAs = process.env.MODEL_HAS_MANY;
-const belongsToAs = process.env.MODEL_BELONGS_TO;
+const { MODEL_HAS_MANY, MODEL_BELONGS_TO } = process.env;
 
 User.hasMany(Favorite, {
-  as: hasManyAs,
+  as: MODEL_HAS_MANY,
 });
 
-Favorite.belongsTo(User, { as: belongsToAs });
+Favorite.belongsTo(User, { as: MODEL_BELONGS_TO });
 
 export default { User, Favorite };

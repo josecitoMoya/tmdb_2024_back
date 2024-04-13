@@ -1,3 +1,40 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: "development"
+      PORT: 3000
+      POSTGRES_HOST: "database"
+      POSTGRES_DB: "tmdb_db"
+      POSTGRES_USER: "joseMoya"
+      POSTGRES_PASSWORD: "db_password"
+      POSTGRES_PORT: 5432
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    volumes:
+      - ".:/back"
+
+  database:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: "tmdb_db"
+      POSTGRES_USER: "joseMoya"
+      POSTGRES_PASSWORD: "db_password"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "db_volume:/var/lib/postgresql"
+
+volumes:
+  db_volume:
+    external: true
 # # Comments are provided throughout this file to help you get started.
 # # If you need more help, visit the Docker Compose reference guide at
 # # https://docs.docker.com/go/compose-spec-reference/
@@ -50,49 +87,62 @@
 #   db-password:
 #     file: db/password.txt
 
-version: "3.9"
+##############################################################################
 
-services:
-  database:
-    image: postgres
-    restart: allways
-    ports:
-      - "5432:5432"
-    environment:
-      - DATABASE_HOST=localhost
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=tmdb_db
+# version: "3.9"
 
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PPGADMIN_DEFAULT_EMAIL: "jose_moya@live.com.ar"
-      PPGADMIN_DEFAULT_PASSWORD: "admin"
-    ports:
-      - "80:80"
-    depends_on:
-      - postgres
+# services:
+#   postgres:
+#     image: postgres
+#     restart: always
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       - DATABASE_HOST=localhost
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=tmdb_db
 
-  server:
-    build:
-      context: .
+#   pgadmin:
+#     image: dpage/pgadmin4
+#     environment:
+#       PPGADMIN_DEFAULT_EMAIL: "jose_moya@live.com.ar"
+#       PPGADMIN_DEFAULT_PASSWORD: "admin"
+#     ports:
+#       - "80:80"
+#     depends_on:
+#       - postgres
 
-    networks:
-      - backend
+#   server:
+#     build:
+#       context: .
 
-    environment:
-      NODE_ENV: development
-      DB_NAME: ${DB_NAME}
-      DB_HOST: db
-      DB_DIALECT: postgres
+#     networks:
+#       - backend
 
-    ports:
-      - "3000:3000"
+#     environment:
+#       NODE_ENV: development
+#       DB_NAME: tmdb_db
+#       DB_HOST: localhost
+#       DB_DIALECT: postgres
 
-    depends_on:
-      - database
+#     ports:
+#       - "3000:3000"
 
-networks:
-  backend:
-    driver: bridge
+#     depends_on:
+#       - postgres
+
+# networks:
+#   backend:
+#     driver: bridge
+
+# version: "3.9"
+# services:
+#   postgres:
+#     image: postgres
+#     restart: always
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       - name=value
+

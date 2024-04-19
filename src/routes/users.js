@@ -20,3 +20,4 @@ user.get("/all", validateUser, findAllUsers);
 user.get("/me", validateUser, (req, res) => {
   res.send(req.user);
 });
+//
